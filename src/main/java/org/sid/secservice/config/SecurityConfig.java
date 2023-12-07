@@ -1,19 +1,30 @@
 package org.sid.secservice.config;
 
+
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
-
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 @Configuration
-public class SecurityConfig {
+public class SecurityConfig  {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests((authz) -> authz
-                        .anyRequest().authenticated())
-                .httpBasic();
-        return http.build();
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                // Implement your own logic to load user details from the database
+                // For simplicity, a hardcoded user is used here
+                return User.withUsername("user")
+                        .password("password")
+                        .roles("USER")
+                        .build();
+            }
+        };
     }
+
+ 
 }
